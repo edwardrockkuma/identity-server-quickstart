@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  Identity-server4-api:
+    # The app service definition
+    container_name: id4-api
+    environment:    
+      - ConnectionString=Server=your-public-ip; port=15432; user id = postgres; password = ; database=IdentityServer; pooling = true
+      - LogConfig__SeriLogApiKey=
+      - LogConfig__SeriLogApiUrl=http://192.168.30.245:5341
+      - IdentityServer__ApiResources__0__Name=TestApi
+      - IdentityServer__ApiResources__0__DisplayName=Test Api
+      - IdentityServer__ApiResources__0__Scopes__0=TestApi.TestScope
+      - IdentityServer__Tokens__AccessExpiredIn=1200
+      - IdentityServer__Tokens__RefreshExpiredIn=-1
+      - IdentityServer__ClientSecret=YourSecret
+    image: registry.xxx.com/customizeid4api:1.0.0-alpha.8-dev
+    ports: 
+      - 5200:5200
+    #depends_on: 
+     # - Identity-server4-postgresql  
+  Identity-server4-postgresql:    
+    container_name: id4-postgresql
+    image: registry.xxx.com/identity-server4-postgresql:1.0.0-alpha.3-3
+    ports: 
+      - 15432:5432  
+
+  
+    
